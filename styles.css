@@ -1,5 +1,10 @@
-/* your beautiful css styling goes here! */
-
-/* Note: an asteroid image is included in this repo. 
-Feel free to use it if you like. */
-
+body {
+  font-family: 'For Personal Gain';
+  text-align: center;
+}
+#title {
+  color: #FF504B;
+}
+svg {
+  margin: 0 auto;
+}
