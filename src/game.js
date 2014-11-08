@@ -7,6 +7,7 @@ var makeGame = function () {
   game.width = 1200;
   game.height = 600;
   game.paused = false;
+  game.inCollision = false;
 
   game.init = function () {
     game.svg = game.createSVG();
@@ -14,6 +15,7 @@ var makeGame = function () {
     game.player = makePlayer(game.svg, game.width, game.height);
     game.score = makeScore();
     game.$container = $('.container');
+    game.sound = makeSound();
 
     window.requestAnimationFrame(game.requestAnimationFrame);
 
@@ -32,11 +34,20 @@ var makeGame = function () {
       var radius = game.getPositionValue(elements[i].r); // SVGAnimatedLength
       var result = game.player.hasCollisions(x, y, radius);
       if (result === true) {
-        game.score.addCollision();
-        game.player.notifyCollision();
+        if (!game.inCollision) {
+          game.score.addCollision();
+          game.player.notifyCollision();
+          game.sound.playCollide();
+          game.inCollision = true;
+          setTimeout(game.updateCollisionStatus, 400);          
+        }
       }
     }
     window.requestAnimationFrame(game.requestAnimationFrame);
+  };
+
+  game.updateCollisionStatus = function () {
+    game.inCollision = false;
   };
 
   game.getPositionValue = function (SVGAnimatedLength) {
@@ -59,6 +70,7 @@ var makeGame = function () {
       game.enemies.pause();
       game.score.pause();
       game.$container.addClass('paused');
+      game.sound.pauseBackground();
     }
   };
 
@@ -68,6 +80,7 @@ var makeGame = function () {
       game.enemies.resume();
       game.score.resume();
       game.$container.removeClass('paused');
+      game.sound.resumeBackground();
     }
   };
 
