@@ -28,7 +28,7 @@ var makePlayer = function(svg, canvasWidth, canvasHeight) {
   };
 
   player.getRadius = function () {
-    return 20;
+    return 11;
   };
 
   player.getPolygonDimension = function () {
