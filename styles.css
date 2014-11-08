@@ -1,10 +1,59 @@
+@font-face {
+    font-family: 'forArtsSake1';
+    src: url(fonts/for-arts-sake/for-arts-sake-1.otf);
+}
+
+@font-face {
+    font-family: 'forArtsSake2';
+    src: url(fonts/for-arts-sake/for-arts-sake-2.otf);
+}
+
 body {
-  font-family: 'For Personal Gain';
+  font-family:  'forArtsSake1';
   text-align: center;
 }
 #title {
   color: #FF504B;
 }
+.scoreboard {
+  margin-bottom: 20px;
+}
 svg {
   margin: 0 auto;
+  border: solid 2px #FF504B;
+}
+
+.container {
+  width: 1200px;
+  height: 600px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.container .paused-message {
+  display: none;
+  font-family:  'forArtsSake1';
+  text-align: center;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100px;
+  height: 40px;
+  color: white;
+  font-size: 40px;
+}
+
+.container.paused {
+  background-color: red;
+}
+
+.container.paused svg {
+  opacity: 0.2;
+}
+
+.container.paused .paused-message {
+  display: block;
 }
