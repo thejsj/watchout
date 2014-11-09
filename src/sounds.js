@@ -8,7 +8,7 @@ var makeSound = function() {
 
   sound.makeThePhillipGlassThing = function() {
     var _sound;
-    
+
     timbre.rec(function(output) {
       var midis = [49, 71, 80, 76, 69, 73, 72, 76].scramble();
       var msec  = timbre.timevalue("bpm120 l08");
@@ -35,20 +35,20 @@ var makeSound = function() {
       _sound = T("delay", {time:"bpm120 l16", fb:0.1, cross:true},
         T("pan", {pos:-0.6}, L), T("pan", {pos:+0.6}, R)
       );
-      _sound.play();
+  //    _sound.play();
       sound.bg = _sound;
     });
   };
 
   sound.pauseBackground = function() {
     if (sound.bg !== undefined) {
-      sound.bg.pause();
+    //  sound.bg.pause();
     }
   };
 
   sound.resumeBackground = function() {
     if (sound.bg !== undefined) {
-      sound.bg.play();
+    //  sound.bg.play();
     }
   };
 
@@ -62,7 +62,7 @@ var makeSound = function() {
   };
 
   sound.playCollide = function() {
-    sound.collide.bang().play();
+   // sound.collide.bang().play();
   };
 
   sound.init();

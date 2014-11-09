@@ -1,4 +1,4 @@
-/* globals d3:true, makeEnemies: true, makePlayer:true, makeScore:true , $:true */
+/* globals d3:true, makeSound:true, makeEnemies: true, makePlayer:true, makeScore:true , $:true */
 
 var makeGame = function () {
 
@@ -10,8 +10,9 @@ var makeGame = function () {
   game.inCollision = false;
 
   game.init = function () {
+    game.force = d3.layout.force();
     game.svg = game.createSVG();
-    game.enemies = makeEnemies(game.svg, game.width, game.height);
+    game.enemies = makeEnemies(game.svg, game.width, game.height, game.force);
     game.player = makePlayer(game.svg, game.width, game.height);
     game.score = makeScore();
     game.$container = $('.container');
@@ -22,6 +23,11 @@ var makeGame = function () {
     game.svg
       .on('mouseleave', game.pause) // When mouse leaves SVG
       .on('mouseenter', game.resume); // When mouse enters SVG
+
+    game.force.on('tick', function() {
+      game.enemies.tick();
+      game.force.resume();
+    });
   };
 
   game.requestAnimationFrame = function () {
@@ -39,7 +45,7 @@ var makeGame = function () {
           game.player.notifyCollision();
           game.sound.playCollide();
           game.inCollision = true;
-          setTimeout(game.updateCollisionStatus, 400);          
+          setTimeout(game.updateCollisionStatus, 400);
         }
       }
     }
