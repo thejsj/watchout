@@ -1,4 +1,4 @@
-/* globals d3:true, makeEnemies: true, makePlayer:true, makeScore:true , $:true */
+/* globals d3:true, makeSound:true, makeEnemies: true, makePlayer:true, makeScore:true , $:true */
 
 var makeGame = function () {
 
@@ -7,19 +7,27 @@ var makeGame = function () {
   game.width = 1200;
   game.height = 600;
   game.paused = false;
+  game.inCollision = false;
 
   game.init = function () {
+    game.force = d3.layout.force();
     game.svg = game.createSVG();
-    game.enemies = makeEnemies(game.svg, game.width, game.height);
+    game.enemies = makeEnemies(game.svg, game.width, game.height, game.force);
     game.player = makePlayer(game.svg, game.width, game.height);
     game.score = makeScore();
     game.$container = $('.container');
+    game.sound = makeSound();
 
     window.requestAnimationFrame(game.requestAnimationFrame);
 
     game.svg
       .on('mouseleave', game.pause) // When mouse leaves SVG
       .on('mouseenter', game.resume); // When mouse enters SVG
+
+    game.force.on('tick', function() {
+      game.enemies.tick();
+      game.force.resume();
+    });
   };
 
   game.requestAnimationFrame = function () {
@@ -32,11 +40,20 @@ var makeGame = function () {
       var radius = game.getPositionValue(elements[i].r); // SVGAnimatedLength
       var result = game.player.hasCollisions(x, y, radius);
       if (result === true) {
-        game.score.addCollision();
-        game.player.notifyCollision();
+        if (!game.inCollision) {
+          game.score.addCollision();
+          game.player.notifyCollision();
+          game.sound.playCollide();
+          game.inCollision = true;
+          setTimeout(game.updateCollisionStatus, 400);
+        }
       }
     }
     window.requestAnimationFrame(game.requestAnimationFrame);
+  };
+
+  game.updateCollisionStatus = function () {
+    game.inCollision = false;
   };
 
   game.getPositionValue = function (SVGAnimatedLength) {
@@ -59,6 +76,7 @@ var makeGame = function () {
       game.enemies.pause();
       game.score.pause();
       game.$container.addClass('paused');
+      game.sound.pauseBackground();
     }
   };
 
@@ -68,6 +86,7 @@ var makeGame = function () {
       game.enemies.resume();
       game.score.resume();
       game.$container.removeClass('paused');
+      game.sound.resumeBackground();
     }
   };
 

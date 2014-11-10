@@ -27,17 +27,9 @@ var makeScore = function() {
 
   // Add Collision and reset the score
   score.addCollision = function () {
-    if (!score.inCollision) {
-      score.collisions += 1;
-      score.score = 0;
-      score.updateDOM();
-      score.inCollision = true;
-      setTimeout(score.updateCollisionStatus, 300);
-    }
-  };
-
-  score.updateCollisionStatus = function () {
-    score.inCollision = false;
+    score.collisions += 1;
+    score.score = 0;
+    score.updateDOM();
   };
 
   score.pause = function () {
